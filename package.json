@@ -30,7 +30,7 @@
 	],
 	"homepage": "https://it.rocks",
 	"keywords": [
-		"backend",
+		"cli",
 		"it.rocks"
 	],
 	"license": "ISC",
@@ -45,5 +45,5 @@
 		"build:esm": "tsc -p tsconfig.esm.json && chmod ugo+x esm/vcs.js"
 	},
 	"types": "./esm/webstorm.d.ts",
-	"version": "0.0.2"
+	"version": "0.0.3"
 }
