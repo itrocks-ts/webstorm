@@ -9,7 +9,7 @@
 	"dependencies": {
 		"@itrocks/app-dir": "latest"
 	},
-	"description": "",
+	"description": "Facilitates developments on the it.rocks framework's source code within a single WebStorm project",
 	"devDependencies": {
 		"@types/node": "^22.10",
 		"typescript": "~5.6"
@@ -45,5 +45,5 @@
 		"build:esm": "tsc -p tsconfig.esm.json && chmod ugo+x esm/vcs.js"
 	},
 	"types": "./esm/webstorm.d.ts",
-	"version": "0.0.3"
+	"version": "0.0.4"
 }

@@ -5,3 +5,5 @@
 [![discord](https://img.shields.io/discord/1314141024020467782?color=7289da&label=discord&logo=discord&logoColor=white)](https://25.re/ditr)
 
 # webstorm
+
+Facilitates developments on the it.rocks framework's source code within a single WebStorm project.
