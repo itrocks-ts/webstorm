@@ -1,5 +1,5 @@
 #!/usr/bin/env node
-import appDir from '@itrocks/app-dir'
+import { appDir } from '@itrocks/app-dir'
 import { accessSync, readdirSync, readFileSync, rmSync, writeFileSync } from 'fs'
 import { basename, join } from 'path'
 import { execSync } from 'child_process'
