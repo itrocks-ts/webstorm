@@ -34,15 +34,23 @@ writeFileSync(vcsFile, vcsContent, 'utf8')
 const build = new Set<string>(modules)
 while (build.size) {
 	build.forEach(module => {
-		let   canBuild = true
-		const path     = join(itrocksPath, module)
-		Object.keys(JSON.parse(readFileSync(path + '/package.json', 'utf-8')).dependencies || {}).forEach(dependency => {
+		let   canBuild     = true
+		const path         = join(itrocksPath, module)
+		const json         = JSON.parse(readFileSync(path + '/package.json', 'utf-8'))
+		const dependencies = json.optionalDependencies || {}
+		Object.assign(dependencies, json.dependencies || {})
+		Object.keys(dependencies).forEach(dependency => {
 			if (dependency.startsWith('@itrocks/') && build.has(basename(dependency))) {
 				canBuild = false
 			}
 		})
 		if (canBuild) {
-			execSync(`npm run build`, {cwd: path, stdio: 'inherit'})
+			if (json.scripts?.build) {
+				execSync(`npm run build`, {cwd: path, stdio: 'inherit'})
+			}
+			else {
+				console.log('No build script for', module)
+			}
 			build.delete(module)
 		}
 	})
