@@ -4,6 +4,7 @@
 		"email": "baptiste@pillot.fr"
 	},
 	"bin": {
+		"build:itrocks:watch": "./cjs/build.js",
 		"vcs-modules": "./cjs/vcs.js"
 	},
 	"dependencies": {
@@ -12,6 +13,7 @@
 	"description": "Facilitates developments on the it.rocks framework's source code within a single WebStorm project",
 	"devDependencies": {
 		"@types/node": "^22.10",
+		"chokidar": "^3.6",
 		"typescript": "~5.8"
 	},
 	"engines": {
@@ -41,9 +43,9 @@
 	},
 	"scripts": {
 		"build": "npm run build:cjs && npm run build:esm",
-		"build:cjs": "tsc -p tsconfig.cjs.json && chmod ugo+x cjs/vcs.js",
-		"build:esm": "tsc -p tsconfig.esm.json && chmod ugo+x esm/vcs.js"
+		"build:cjs": "tsc -p tsconfig.cjs.json && chmod ugo+x cjs/vcs.js cjs/build.js",
+		"build:esm": "tsc -p tsconfig.esm.json && chmod ugo+x esm/vcs.js esm/build.js"
 	},
 	"types": "./esm/webstorm.d.ts",
-	"version": "0.0.7"
+	"version": "0.1.0"
 }
