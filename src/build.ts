@@ -78,6 +78,7 @@ const watcher = watch(baseDir, {
 
 watcher.on('change', (filePath: string) => {
 	if (!filePath.endsWith('.ts') && !filePath.endsWith('.scss')) return
+	if (filePath.endsWith('.d.ts')) return
 	console.log('  Modified', filePath)
 	runBuild(filePath)
 })
