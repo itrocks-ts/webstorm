@@ -4,8 +4,8 @@
 		"email": "baptiste@pillot.fr"
 	},
 	"bin": {
-		"build:itrocks:watch": "./cjs/build.js",
-		"vcs-modules": "./cjs/vcs.js"
+		"wsbuild": "./cjs/build.js",
+		"vcs-modules": "./cjs/cjs.js"
 	},
 	"dependencies": {
 		"@itrocks/app-dir": "latest"
@@ -32,8 +32,18 @@
 	],
 	"homepage": "https://it.rocks",
 	"keywords": [
+		"build",
 		"cli",
-		"it.rocks"
+		"dev",
+		"development",
+		"git",
+		"it.rocks",
+		"local",
+		"node",
+		"typescript",
+		"vcs",
+		"watch",
+		"webstorm"
 	],
 	"license": "ISC",
 	"name": "@itrocks/webstorm",
@@ -47,5 +57,5 @@
 		"build:esm": "tsc -p tsconfig.esm.json && chmod ugo+x esm/vcs.js esm/build.js"
 	},
 	"types": "./esm/webstorm.d.ts",
-	"version": "0.1.1"
+	"version": "0.1.2"
 }
