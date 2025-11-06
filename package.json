@@ -5,7 +5,7 @@
 	},
 	"bin": {
 		"wsbuild": "./cjs/build.js",
-		"vcs-modules": "./cjs/cjs.js"
+		"vcs-modules": "./cjs/vcs.js"
 	},
 	"dependencies": {
 		"@itrocks/app-dir": "latest"
@@ -57,5 +57,5 @@
 		"build:esm": "tsc -p tsconfig.esm.json && chmod ugo+x esm/vcs.js esm/build.js"
 	},
 	"types": "./esm/webstorm.d.ts",
-	"version": "0.1.2"
+	"version": "0.1.3"
 }
