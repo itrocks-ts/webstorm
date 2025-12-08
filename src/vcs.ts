@@ -18,18 +18,23 @@ modules.forEach(module => {
 	}
 })
 
-const vcsFile  = appDir + '/.idea/vcs.xml'
-let vcsContent = readFileSync(vcsFile, 'utf8')
-	.replaceAll(/\n\s*<mapping directory="\$PROJECT_DIR\$\/node_modules\/@itrocks\/.*" vcs="Git" \/>/g, '')
-modules.forEach(module => {
-	if (!vcsContent.includes(`/@itrocks/${module}"`)) {
-		vcsContent = vcsContent.replace(
-			'</component>',
-			`  <mapping directory="$PROJECT_DIR$/node_modules/@itrocks/${module}" vcs="Git" />\n  </component>`
-		)
-	}
-})
-writeFileSync(vcsFile, vcsContent, 'utf8')
+try {
+	const vcsFile = appDir + '/.idea/vcs.xml'
+	let vcsContent = readFileSync(vcsFile, 'utf8')
+		.replaceAll(/\n\s*<mapping directory="\$PROJECT_DIR\$\/node_modules\/@itrocks\/.*" vcs="Git" \/>/g, '')
+	modules.forEach(module => {
+		if (!vcsContent.includes(`/@itrocks/${module}"`)) {
+			vcsContent = vcsContent.replace(
+				'</component>',
+				`  <mapping directory="$PROJECT_DIR$/node_modules/@itrocks/${module}" vcs="Git" />\n  </component>`
+			)
+		}
+	})
+	writeFileSync(vcsFile, vcsContent, 'utf8')
+}
+catch {
+	console.error('No such file or directory .idea/vcl.xml: ignored.')
+}
 
 const build = new Set<string>(modules)
 while (build.size) {
