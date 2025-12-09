@@ -1,14 +1,19 @@
-import { appDir }   from '@itrocks/app-dir'
-import { access }   from 'node:fs/promises'
-import { readdir }  from 'node:fs/promises'
-import { readFile } from 'node:fs/promises'
-import { join }     from 'node:path'
-import { relative } from 'node:path'
-import { run }      from 'npm-check-updates'
-import { diff }     from 'semver'
-import { valid }    from 'semver'
+import { appDir }    from '@itrocks/app-dir'
+import { access }    from 'node:fs/promises'
+import { readdir }   from 'node:fs/promises'
+import { readFile }  from 'node:fs/promises'
+import { writeFile } from 'node:fs/promises'
+import { join }      from 'node:path'
+import { run }       from 'npm-check-updates'
+import { coerce }    from 'semver'
+import { diff }      from 'semver'
+import { inc }       from 'semver'
+import { valid }     from 'semver'
 
 const baseDir = appDir + '/node_modules/@itrocks'
+const upgrade = process.argv.slice(2).includes('upgrade')
+
+type Majors = Record<string, { current: string, latest: string }>
 
 function cleanVersion(version: string)
 {
@@ -34,16 +39,19 @@ async function findMajorsForPackageJson(packageFile: string)
 	})
 	if (!upgraded) return {}
 
-	const majors: Record<string, { current: string, latest: string }> = {}
+	const majors: Majors = {}
 
 	for (const [name, latestRange] of Object.entries(upgraded)) {
 		const currentRange = allDeps[name]
 		if (!currentRange) continue
 
-		const current = cleanVersion(currentRange)
-		const latest  = cleanVersion(latestRange)
+		const current = coerce(cleanVersion(currentRange))
+		const latest  = coerce(cleanVersion(latestRange))
 
-		if ((current === 'latest') || (current === latest)) continue
+		if (!current || !latest || !valid(current) || !valid(latest)) continue
+
+		const changeType = diff(current, latest)
+		if ((changeType !== 'major') && (changeType !== 'premajor')) continue
 
 		majors[name] = {
 			current: currentRange,
@@ -71,14 +79,49 @@ async function getPackageDirs(dir: string)
 	return dirs
 }
 
+async function upgradePackageJson(packageFile: string, majors: Majors)
+{
+	let   fromVersion: string | undefined
+	const names      = Object.keys(majors)
+	const pkg        = await readJson(packageFile) as Record<string, Record<string, string> | string>
+	const sections   = ['dependencies', 'devDependencies', 'peerDependencies', 'optionalDependencies']
+
+	for (const name of names) {
+		for (const section of sections) {
+			const deps = pkg[section]
+			if ((typeof deps === 'object') && deps[name]) {
+				deps[name] = majors[name].latest
+			}
+		}
+	}
+
+	if (typeof pkg.version === 'string') {
+		fromVersion = coerce(pkg.version)?.toString() ?? undefined
+		if (fromVersion) {
+			pkg.version = inc(pkg.version, 'patch') ?? pkg.version
+		}
+	}
+
+	await writeJson(packageFile, pkg)
+
+	if (fromVersion && (pkg.version !== fromVersion)) {
+		console.log(`  package version  ${fromVersion}  →  ${pkg.version}`)
+	}
+}
+
 async function main()
 {
+	if (upgrade) {
+		console.log('Mode upgrade : les package.json seront mis à jour et la version mineure sera incrémentée\n')
+	}
+
 	const packageDirs = await getPackageDirs(baseDir)
 	let   total       = 0
 
 	packageDirs.push(appDir)
 
 	for (const dir of packageDirs) {
+		let   changes     = 0
 		const packageFile = join(dir, 'package.json')
 		const majors      = await findMajorsForPackageJson(packageFile)
 		if (!Object.keys(majors).length) continue
@@ -86,7 +129,12 @@ async function main()
 		console.log(`\n${dir.substring(dir.indexOf('@itrocks'))}`)
 		for (const [name, { current, latest }] of Object.entries(majors)) {
 			console.log(`  ${name}  ${current}  →  ${latest}`)
-			total ++
+			changes ++
+			total   ++
+		}
+
+		if (changes && upgrade) {
+			await upgradePackageJson(packageFile, majors)
 		}
 	}
 
@@ -101,6 +149,11 @@ async function main()
 async function readJson(file: string)
 {
 	return JSON.parse(await readFile(file, 'utf8'))
+}
+
+async function writeJson(file: string, value: unknown)
+{
+	await writeFile(file, JSON.stringify(value, null, '\t') + '\n')
 }
 
 main().catch(error => {
