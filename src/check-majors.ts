@@ -31,12 +31,14 @@ async function findMajorsForPackageJson(packageFile: string)
 	}
 	if (!Object.keys(allDeps).length) return {}
 
+	process.setMaxListeners(0)
 	const upgraded = await run({
 		jsonUpgraded: true,
 		packageFile,
 		silent:       true,
 		upgrade:      false
 	})
+	process.removeAllListeners('exit')
 	if (!upgraded) return {}
 
 	const majors: Majors = {}
@@ -51,7 +53,7 @@ async function findMajorsForPackageJson(packageFile: string)
 		if (!current || !latest || !valid(current) || !valid(latest)) continue
 
 		const changeType = diff(current, latest)
-		if ((changeType !== 'major') && (changeType !== 'premajor')) continue
+		if (!changeType) continue
 
 		majors[name] = {
 			current: currentRange,
