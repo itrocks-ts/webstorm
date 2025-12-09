@@ -62,5 +62,5 @@
 		"build:esm": "tsc -p tsconfig.esm.json && chmod ugo+x esm/build.js esm/check-majors.js esm/publish.js esm/vcs.js "
 	},
 	"types": "./esm/webstorm.d.ts",
-	"version": "0.3.2"
+	"version": "0.3.3"
 }

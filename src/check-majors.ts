@@ -115,7 +115,7 @@ async function upgradePackageJson(packageFile: string, majors: Majors)
 async function main()
 {
 	if (upgrade) {
-		console.log('Mode upgrade : les package.json seront mis à jour et la version mineure sera incrémentée\n')
+		console.log('Upgrade mode: package.json files will be updated and the minor version will be incremented\n')
 	}
 
 	const packageDirs = await getPackageDirs(baseDir)
@@ -142,10 +142,10 @@ async function main()
 	}
 
 	if (!total) {
-		console.log('Aucun bump majeur dispo dans @itrocks, tu peux dormir tranquille 😎')
+		console.log('No major bump available in @itrocks, you can sleep soundly 😎')
 	}
 	else {
-		console.log(`\n${total} dépendance(s) avec une major dispo dans @itrocks`)
+		console.log(`\n${total} dependency(ies) with a major available in @itrocks`)
 	}
 }
 
