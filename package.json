@@ -5,6 +5,7 @@
 	},
 	"bin": {
 		"check-majors": "./cjs/check-majors.js",
+		"it-publish": "./cjs/publish.ts",
 		"vcs-modules": "./cjs/vcs.js",
 		"wsbuild": "./cjs/build.js"
 	},
@@ -61,5 +62,5 @@
 		"build:esm": "tsc -p tsconfig.esm.json && chmod ugo+x esm/vcs.js esm/build.js"
 	},
 	"types": "./esm/webstorm.d.ts",
-	"version": "0.2.2"
+	"version": "0.3.1"
 }
