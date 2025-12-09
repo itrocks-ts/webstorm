@@ -1,3 +1,4 @@
+#!/usr/bin/env node
 import { appDir }   from '@itrocks/app-dir'
 import { execFile } from 'node:child_process'
 import { access }   from 'node:fs/promises'

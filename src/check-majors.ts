@@ -1,3 +1,4 @@
+#!/usr/bin/env node
 import { appDir }    from '@itrocks/app-dir'
 import { access }    from 'node:fs/promises'
 import { readdir }   from 'node:fs/promises'

@@ -58,9 +58,9 @@
 	},
 	"scripts": {
 		"build": "npm run build:cjs && npm run build:esm",
-		"build:cjs": "tsc -p tsconfig.cjs.json && chmod ugo+x cjs/vcs.js cjs/build.js",
-		"build:esm": "tsc -p tsconfig.esm.json && chmod ugo+x esm/vcs.js esm/build.js"
+		"build:cjs": "tsc -p tsconfig.cjs.json && chmod ugo+x cjs/build.js cjs/check-majors.js cjs/publish.js cjs/vcs.js",
+		"build:esm": "tsc -p tsconfig.esm.json && chmod ugo+x esm/build.js esm/check-majors.js esm/publish.js esm/vcs.js "
 	},
 	"types": "./esm/webstorm.d.ts",
-	"version": "0.3.1"
+	"version": "0.3.2"
 }
